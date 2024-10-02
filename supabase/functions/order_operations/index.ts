@@ -41,11 +41,6 @@ const validate_uuid = (str: string) => {
   return UUID_pattern.test(str);
 };
 
-const supabase = createClient<Database>(
-  Deno.env.get("SUPABASE_URL")!,
-  Deno.env.get("SUPABASE_ANON_KEY")!,
-);
-
 Deno.serve(async (req: Request) => {
   const {
     profile_id,
@@ -66,6 +61,14 @@ Deno.serve(async (req: Request) => {
   ) {
     return new Response("Invalid infromation in body!", { status: 400 });
   }
+
+  const supabase = createClient<Database>(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    // {
+    //   global: { headers: { Authorization: req.headers.get("Authorization")! } },
+    // },
+  );
 
   const { data: orders_data, error: error1 } = await supabase.from(
     "orders_data",
