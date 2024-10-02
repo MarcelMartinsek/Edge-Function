@@ -19,6 +19,11 @@ database
 • Calculate the order totals of all the other orders inside the database and return the
 value
 */
+import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { createClient } from "npm:@supabase/supabase-js@2";
+
+// Setup type definitions for built-in Supabase Runtime APIs
+import { Database } from "../supabase.ts";
 
 interface Order_creation_obj {
   profile_id: string;
@@ -35,12 +40,6 @@ const UUID_pattern = new RegExp(
 const validate_uuid = (str: string) => {
   return UUID_pattern.test(str);
 };
-
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createClient } from "npm:@supabase/supabase-js@2";
-
-// Setup type definitions for built-in Supabase Runtime APIs
-import { Database } from "../supabase.ts";
 
 const supabase = createClient<Database>(
   Deno.env.get("SUPABASE_URL")!,
